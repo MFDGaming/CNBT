@@ -380,6 +380,9 @@ void put_compound_tag(compound_t value, int endianess, binary_stream_t *stream)
 {
 	int i;
 	for (i = 0; i < value.size; ++i) {
+		if (value.tag_ids[i] == 0) {
+			break;
+		}
 		put_byte_tag(value.tag_ids[i], stream);
 		put_string_tag(value.names[i], endianess, stream);
 		put_multi_tag(value.data[i], value.tag_ids[i], endianess, stream);
