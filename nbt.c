@@ -126,7 +126,7 @@ union multi get_multi_tag(char tag_id, int endianess, binary_stream_t *stream)
 			tag.byte_tag = get_byte_tag(stream);
 			break;
 		case SHORT_TAG:
-			tag.byte_tag = get_short_tag(endianess, stream);
+			tag.short_tag = get_short_tag(endianess, stream);
 			break;
 		case INT_TAG:
 			tag.int_tag = get_int_tag(endianess, stream);
@@ -222,26 +222,185 @@ long_array_t get_long_array_tag(int endianess, binary_stream_t *stream)
 	return long_array;
 }
 
-void put_byte_tag(char value, binary_stream_t *stream);
+void put_byte_tag(char value, binary_stream_t *stream)
+{
+	put_byte(value, stream);
+}
 
-void put_short_tag(short value, int endianess, binary_stream_t *stream);
+void put_short_tag(short value, int endianess, binary_stream_t *stream)
+{
+	switch (endianess) {
+		case BIG_ENDIAN:
+			put_short_be(value, stream);
+			break;
+		case LITTLE_ENDIAN:
+		case NETWORK_ENDIAN:
+			put_short_le(value, stream);
+			break;
+	}
+}
 
-void put_int_tag(long value, int endianess, binary_stream_t *stream);
+void put_int_tag(long value, int endianess, binary_stream_t *stream)
+{
+	switch (endianess) {
+		case BIG_ENDIAN:
+			put_int_be(value, stream);
+			break;
+		case LITTLE_ENDIAN:
+			put_int_le(value, stream);
+			break;
+		case NETWORK_ENDIAN:
+			put_signed_var_int(value, stream);
+			break;
+	}
+}
 
-void put_long_tag(long long value, int endianess, binary_stream_t *stream);
+void put_long_tag(long long value, int endianess, binary_stream_t *stream)
+{
+	switch (endianess) {
+		case BIG_ENDIAN:
+			put_long_be(value, stream);
+			break;
+		case LITTLE_ENDIAN:
+			put_long_le(value, stream);
+			break;
+		case NETWORK_ENDIAN:
+			put_signed_var_long(value, stream);
+			break;
+	}
+}
 
-void put_float_tag(float value, int endianess, binary_stream_t *stream);
+void put_float_tag(float value, int endianess, binary_stream_t *stream)
+{
+	switch (endianess) {
+		case BIG_ENDIAN:
+			put_float_be(value, stream);
+			break;
+		case LITTLE_ENDIAN:
+		case NETWORK_ENDIAN:
+			put_float_le(value, stream);
+			break;
+	}
+}
 
-void put_double_tag(double value, int endianess, binary_stream_t *stream);
+void put_double_tag(double value, int endianess, binary_stream_t *stream)
+{
+	switch (endianess) {
+		case BIG_ENDIAN:
+			put_double_be(value, stream);
+			break;
+		case LITTLE_ENDIAN:
+		case NETWORK_ENDIAN:
+			put_double_le(value, stream);
+			break;
+	}
+}
 
-void put_byte_array_tag(byte_array_t value, int endianess, binary_stream_t *stream);
+void put_byte_array_tag(byte_array_t value, int endianess, binary_stream_t *stream)
+{
+	put_int_tag(value.size, endianess, stream);
+	int i;
+	for (i = 0; i < value.size; ++i) {
+		put_byte_tag(value.data[i], stream);
+	}
+}
 
-void put_string_tag(char *value, int endianess, binary_stream_t *stream);
+void put_string_tag(char *value, int endianess, binary_stream_t *stream)
+{
+	switch (endianess) {
+		case BIG_ENDIAN:
+			put_unsigned_short_be(strlen(value), stream);
+			break;
+		case LITTLE_ENDIAN:
+			put_unsigned_short_le(strlen(value), stream);
+			break;
+		case NETWORK_ENDIAN:
+			put_var_int(strlen(value), stream);
+			break;
+	}
+	int i;
+	for (i = 0; i < strlen(value); ++i) {
+		put_byte_tag(value[i], stream);
+	}
+}
 
-void put_list_tag(list_t value, int endianess, binary_stream_t *stream);
+void put_multi_tag(union multi value, char tag_id, int endianess, binary_stream_t *stream)
+{
+	switch (tag_id) {
+		case BYTE_TAG:
+			put_byte_tag(value.byte_tag, stream);
+			break;
+		case SHORT_TAG:
+			put_short_tag(value.short_tag, endianess, stream);
+			break;
+		case INT_TAG:
+			put_int_tag(value.int_tag, endianess, stream);
+			break;
+		case LONG_TAG:
+			put_long_tag(value.long_tag, endianess, stream);
+			break;
+		case FLOAT_TAG:
+			put_float_tag(value.float_tag, endianess, stream);
+			break;
+		case DOUBLE_TAG:
+			put_double_tag(value.double_tag, endianess, stream);
+			break;
+		case BYTE_ARRAY_TAG:
+			put_byte_array_tag(value.byte_array_tag, endianess, stream);
+			break;
+		case STRING_TAG:
+			put_string_tag(value.string_tag, endianess, stream);
+			break;
+		case LIST_TAG:
+			put_list_tag(value.list_tag, endianess, stream);
+			break;
+		case COMPOUND_TAG:
+			put_compound_tag(value.compound_tag, endianess, stream);
+			break;
+		case INT_ARRAY_TAG:
+			put_int_array_tag(value.int_array_tag, endianess, stream);
+			break;
+		case LONG_ARRAY_TAG:
+			put_long_array_tag(value.long_array_tag, endianess, stream);
+			break;
+	}
+}
 
-void put_compound_tag(compound_t value, int endianess, binary_stream_t *stream);
+void put_list_tag(list_t value, int endianess, binary_stream_t *stream)
+{
+	put_byte_tag(value.tag_id, stream);
+	put_int_tag(value.size, endianess, stream);
+	int i;
+	for (i = 0; i < value.size; ++i) {
+		put_multi_tag(value.data[i], value.tag_id, endianess, stream);
+	}
+}
 
-void put_int_array_tag(int_array_t value, int endianess, binary_stream_t *stream);
+void put_compound_tag(compound_t value, int endianess, binary_stream_t *stream)
+{
+	int i;
+	for (i = 0; i < value.size; ++i) {
+		put_byte_tag(value.tag_ids[i], stream);
+		put_string_tag(value.names[i], endianess, stream);
+		put_multi_tag(value.data[i], value.tag_ids[i], endianess, stream);
+	}
+	put_byte_tag(0, stream);
+}
 
-void put_long_array_tag(long_array_t value, int endianess, binary_stream_t *stream);
+void put_int_array_tag(int_array_t value, int endianess, binary_stream_t *stream)
+{
+	put_int_tag(value.size, endianess, stream);
+	int i;
+	for (i = 0; i < value.size; ++i) {
+		put_int_tag(value.data[i], endianess, stream);
+	}
+}
+
+void put_long_array_tag(long_array_t value, int endianess, binary_stream_t *stream)
+{
+	put_int_tag(value.size, endianess, stream);
+	int i;
+	for (i = 0; i < value.size; ++i) {
+		put_long_tag(value.data[i], endianess, stream);
+	}
+}
