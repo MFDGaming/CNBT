@@ -114,6 +114,8 @@ void put_byte_array_tag(byte_array_t value, int endianess, binary_stream_t *stre
 
 void put_string_tag(char *value, int endianess, binary_stream_t *stream);
 
+void put_multi_tag(union multi value, char tag_id, int endianess, binary_stream_t *stream);
+
 void put_list_tag(list_t value, int endianess, binary_stream_t *stream);
 
 void put_compound_tag(compound_t value, int endianess, binary_stream_t *stream);
