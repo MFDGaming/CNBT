@@ -202,7 +202,7 @@ int_array_t get_int_array_tag(int endianess, binary_stream_t *stream)
 {
 	int_array_t int_array;
 	int_array.size = get_int_tag(endianess, stream);
-	int_array.data = malloc(int_array.size * sizeof(char));
+	int_array.data = malloc(int_array.size * sizeof(long));
 	int i;
 	for (i = 0; i < int_array.size; ++i) {
 		int_array.data[i] = get_int_tag(endianess, stream);
@@ -214,7 +214,7 @@ long_array_t get_long_array_tag(int endianess, binary_stream_t *stream)
 {
 	long_array_t long_array;
 	long_array.size = get_int_tag(endianess, stream);
-	long_array.data = malloc(long_array.size * sizeof(char));
+	long_array.data = malloc(long_array.size * sizeof(long long));
 	int i;
 	for (i = 0; i < long_array.size; ++i) {
 		long_array.data[i] = get_int_tag(endianess, stream);
