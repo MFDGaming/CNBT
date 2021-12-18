@@ -23,9 +23,9 @@
 #define INT_ARRAY_TAG 11
 #define LONG_ARRAY_TAG 12
 
-#define BIG_ENDIAN 0
-#define LITTLE_ENDIAN 1
-#define NETWORK_ENDIAN 2
+#define E_BIG_ENDIAN 0
+#define E_LITTLE_ENDIAN 1
+#define E_NETWORK_ENDIAN 2
 
 union multi;
 

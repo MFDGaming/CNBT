@@ -16,10 +16,10 @@ char get_byte_tag(binary_stream_t *stream)
 short get_short_tag(int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			return get_short_be(stream);
-		case LITTLE_ENDIAN:
-		case NETWORK_ENDIAN:
+		case E_LITTLE_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			return get_short_le(stream);
 		default:
 			return 0;
@@ -29,11 +29,11 @@ short get_short_tag(int endianess, binary_stream_t *stream)
 long get_int_tag(int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			return get_int_be(stream);
-		case LITTLE_ENDIAN:
+		case E_LITTLE_ENDIAN:
 			return get_int_le(stream);
-		case NETWORK_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			return get_signed_var_int(stream);
 		default:
 			return 0;
@@ -43,11 +43,11 @@ long get_int_tag(int endianess, binary_stream_t *stream)
 long long get_long_tag(int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			return get_long_be(stream);
-		case LITTLE_ENDIAN:
+		case E_LITTLE_ENDIAN:
 			return get_long_le(stream);
-		case NETWORK_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			return get_signed_var_long(stream);
 		default:
 			return 0;
@@ -57,10 +57,10 @@ long long get_long_tag(int endianess, binary_stream_t *stream)
 float get_float_tag(int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			return get_float_be(stream);
-		case LITTLE_ENDIAN:
-		case NETWORK_ENDIAN:
+		case E_LITTLE_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			return get_float_le(stream);
 		default:
 			return 0;
@@ -70,10 +70,10 @@ float get_float_tag(int endianess, binary_stream_t *stream)
 double get_double_tag(int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			return get_double_be(stream);
-		case LITTLE_ENDIAN:
-		case NETWORK_ENDIAN:
+		case E_LITTLE_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			return get_double_le(stream);
 		default:
 			return 0;
@@ -96,13 +96,13 @@ char *get_string_tag(int endianess, binary_stream_t *stream)
 {
 	long length;
 	switch (endianess) {
-                case BIG_ENDIAN:
+                case E_BIG_ENDIAN:
                         length = get_unsigned_short_be(stream);
 			break;
-                case LITTLE_ENDIAN:
+                case E_LITTLE_ENDIAN:
 			length = get_unsigned_short_le(stream);
 			break;
-                case NETWORK_ENDIAN:
+                case E_NETWORK_ENDIAN:
                         length = get_var_int(stream);
 			break;
                 default:
@@ -230,11 +230,11 @@ void put_byte_tag(char value, binary_stream_t *stream)
 void put_short_tag(short value, int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			put_short_be(value, stream);
 			break;
-		case LITTLE_ENDIAN:
-		case NETWORK_ENDIAN:
+		case E_LITTLE_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			put_short_le(value, stream);
 			break;
 	}
@@ -243,13 +243,13 @@ void put_short_tag(short value, int endianess, binary_stream_t *stream)
 void put_int_tag(long value, int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			put_int_be(value, stream);
 			break;
-		case LITTLE_ENDIAN:
+		case E_LITTLE_ENDIAN:
 			put_int_le(value, stream);
 			break;
-		case NETWORK_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			put_signed_var_int(value, stream);
 			break;
 	}
@@ -258,13 +258,13 @@ void put_int_tag(long value, int endianess, binary_stream_t *stream)
 void put_long_tag(long long value, int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			put_long_be(value, stream);
 			break;
-		case LITTLE_ENDIAN:
+		case E_LITTLE_ENDIAN:
 			put_long_le(value, stream);
 			break;
-		case NETWORK_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			put_signed_var_long(value, stream);
 			break;
 	}
@@ -273,11 +273,11 @@ void put_long_tag(long long value, int endianess, binary_stream_t *stream)
 void put_float_tag(float value, int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			put_float_be(value, stream);
 			break;
-		case LITTLE_ENDIAN:
-		case NETWORK_ENDIAN:
+		case E_LITTLE_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			put_float_le(value, stream);
 			break;
 	}
@@ -286,11 +286,11 @@ void put_float_tag(float value, int endianess, binary_stream_t *stream)
 void put_double_tag(double value, int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			put_double_be(value, stream);
 			break;
-		case LITTLE_ENDIAN:
-		case NETWORK_ENDIAN:
+		case E_LITTLE_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			put_double_le(value, stream);
 			break;
 	}
@@ -308,13 +308,13 @@ void put_byte_array_tag(byte_array_t value, int endianess, binary_stream_t *stre
 void put_string_tag(char *value, int endianess, binary_stream_t *stream)
 {
 	switch (endianess) {
-		case BIG_ENDIAN:
+		case E_BIG_ENDIAN:
 			put_unsigned_short_be(strlen(value), stream);
 			break;
-		case LITTLE_ENDIAN:
+		case E_LITTLE_ENDIAN:
 			put_unsigned_short_le(strlen(value), stream);
 			break;
-		case NETWORK_ENDIAN:
+		case E_NETWORK_ENDIAN:
 			put_var_int(strlen(value), stream);
 			break;
 	}
