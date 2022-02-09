@@ -8,6 +8,7 @@
 #define NBT_H
 
 #include "./cbinarystream/binary_stream.h"
+#include <stdint.h>
 
 #define END_TAG 0
 #define BYTE_TAG 1
@@ -27,101 +28,102 @@
 #define E_LITTLE_ENDIAN 1
 #define E_NETWORK_ENDIAN 2
 
-union multi;
+union _nbt_multi;
+typedef union _nbt_multi nbt_multi_t;
 
 typedef struct {
-	char *data;
-	long size;
-} byte_array_t;
+	int8_t *data;
+	int32_t size;
+} nbt_byte_array_t;
 
 typedef struct {
-        long *data;
-        long size;
-} int_array_t;
+        int32_t *data;
+        int32_t size;
+} nbt_int_array_t;
 
 typedef struct {
         long long *data;
-        long size;
-} long_array_t;
+        int32_t size;
+} nbt_long_array_t;
 
 typedef struct {
-	char tag_id;
-	long size;
-	union multi *data;
-} list_t;
+	int8_t tag_id;
+	int32_t size;
+	nbt_multi_t *data;
+} nbt_list_t;
 
 typedef struct {
 	int size;
-	char *tag_ids;
+	int8_t *tag_ids;
 	char **names;
-	union multi *data;
-} compound_t;
+	nbt_multi_t *data;
+} nbt_compound_t;
 
-union multi {
-	char byte_tag;
-	short short_tag;
-	long int_tag;
-	long long long_tag;
+union _nbt_multi {
+	int8_t byte_tag;
+	int16_t short_tag;
+	int32_t int_tag;
+	int64_t long_tag;
 	float float_tag;
 	double double_tag;
-	byte_array_t byte_array_tag;
+	nbt_byte_array_t byte_array_tag;
 	char *string_tag;
-	list_t list_tag;
-	int_array_t int_array_tag;
-	long_array_t long_array_tag;
-	compound_t compound_tag;
+	nbt_list_t list_tag;
+	nbt_int_array_t int_array_tag;
+	nbt_long_array_t long_array_tag;
+	nbt_compound_t compound_tag;
 };
 
-char get_byte_tag(binary_stream_t *stream);
+int8_t get_nbt_byte_tag(binary_stream_t *stream);
 
-short get_short_tag(int endianess, binary_stream_t *stream);
+int16_t get_nbt_short_tag(uint8_t endianess, binary_stream_t *stream);
 
-long get_int_tag(int endianess, binary_stream_t *stream);
+int32_t get_nbt_int_tag(uint8_t endianess, binary_stream_t *stream);
 
-long long get_long_tag(int endianess, binary_stream_t *stream);
+int64_t get_nbt_long_tag(uint8_t endianess, binary_stream_t *stream);
 
-float get_float_tag(int endianess, binary_stream_t *stream);
+float get_nbt_float_tag(uint8_t endianess, binary_stream_t *stream);
 
-double get_double_tag(int endianess, binary_stream_t *stream);
+double get_nbt_double_tag(uint8_t endianess, binary_stream_t *stream);
 
-byte_array_t get_byte_array_tag(int endianess, binary_stream_t *stream);
+nbt_byte_array_t get_nbt_byte_array_tag(uint8_t endianess, binary_stream_t *stream);
 
-char *get_string_tag(int endianess, binary_stream_t *stream);
+char *get_nbt_string_tag(uint8_t endianess, binary_stream_t *stream);
 
-union multi get_multi_tag(char tag_id, int endianess, binary_stream_t *stream);
+nbt_multi_t get_nbt_multi_tag(int8_t tag_id, uint8_t endianess, binary_stream_t *stream);
 
-list_t get_list_tag(int endianess, binary_stream_t *stream);
+nbt_list_t get_nbt_list_tag(uint8_t endianess, binary_stream_t *stream);
 
-compound_t get_compound_tag(int endianess, binary_stream_t *stream);
+nbt_compound_t get_nbt_compound_tag(uint8_t endianess, binary_stream_t *stream);
 
-int_array_t get_int_array_tag(int endianess, binary_stream_t *stream);
+nbt_int_array_t get_nbt_int_array_tag(uint8_t endianess, binary_stream_t *stream);
 
-long_array_t get_long_array_tag(int endianess, binary_stream_t *stream);
+nbt_long_array_t get_nbt_long_array_tag(uint8_t endianess, binary_stream_t *stream);
 
-void put_byte_tag(char value, binary_stream_t *stream);
+void put_nbt_byte_tag(int8_t value, binary_stream_t *stream);
 
-void put_short_tag(short value, int endianess, binary_stream_t *stream);
+void put_nbt_short_tag(int16_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_int_tag(long value, int endianess, binary_stream_t *stream);
+void put_nbt_int_tag(int32_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_long_tag(long long value, int endianess, binary_stream_t *stream);
+void put_nbt_long_tag(int64_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_float_tag(float value, int endianess, binary_stream_t *stream);
+void put_nbt_float_tag(float value, uint8_t endianess, binary_stream_t *stream);
 
-void put_double_tag(double value, int endianess, binary_stream_t *stream);
+void put_nbt_double_tag(double value, uint8_t endianess, binary_stream_t *stream);
 
-void put_byte_array_tag(byte_array_t value, int endianess, binary_stream_t *stream);
+void put_nbt_byte_array_tag(nbt_byte_array_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_string_tag(char *value, int endianess, binary_stream_t *stream);
+void put_nbt_string_tag(char *value, uint8_t endianess, binary_stream_t *stream);
 
-void put_multi_tag(union multi value, char tag_id, int endianess, binary_stream_t *stream);
+void put_nbt_multi_tag(nbt_multi_t value, int8_t tag_id, uint8_t endianess, binary_stream_t *stream);
 
-void put_list_tag(list_t value, int endianess, binary_stream_t *stream);
+void put_nbt_list_tag(nbt_list_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_compound_tag(compound_t value, int endianess, binary_stream_t *stream);
+void put_nbt_compound_tag(nbt_compound_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_int_array_tag(int_array_t value, int endianess, binary_stream_t *stream);
+void put_nbt_int_array_tag(nbt_int_array_t value, uint8_t endianess, binary_stream_t *stream);
 
-void put_long_array_tag(long_array_t value, int endianess, binary_stream_t *stream);
+void put_nbt_long_array_tag(nbt_long_array_t value, uint8_t endianess, binary_stream_t *stream);
 
 #endif
