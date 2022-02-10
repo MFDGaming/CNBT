@@ -175,22 +175,22 @@ nbt_list_t get_nbt_list_tag(uint8_t endianess, binary_stream_t *stream)
 	return list;
 }
 
-compound_t get_compound_tag(uint8_t endianess, binary_stream_t *stream)
+compound_t get_nbt_compound_tag(uint8_t endianess, binary_stream_t *stream)
 {
-	compound_t compound;
+	nbt_compound_t compound;
 	compound.size = 0;
-	compound.tag_ids = malloc(0);
-	compound.names = malloc(0);
-	compound.data = malloc(0);
+	compound.tag_ids = (int8_t *) malloc(0);
+	compound.names = (char *) malloc(0);
+	compound.data = (nbt_multi_t *) malloc(0);
 	while (stream->offset < stream->size) {
-		char tag_id = get_byte_tag(stream);
+		int8_t tag_id = get_byte_tag(stream);
 		if (tag_id == 0) {
 			break;
 		}
 		++compound.size;
-		compound.tag_ids = realloc(compound.tag_ids, compound.size);
-		compound.names = realloc(compound.names, compound.size * sizeof(char *));
-		compound.data = realloc(compound.data, compound.size * sizeof(union multi));
+		compound.tag_ids = (int8_t *) realloc(compound.tag_ids, compound.size);
+		compound.names = (char *) realloc(compound.names, compound.size * sizeof(char *));
+		compound.data = (nbt_multi_t *) realloc(compound.data, compound.size * sizeof(nbt_multi_t));
 		compound.tag_ids[compound.size - 1] = tag_id;
 		compound.names[compound.size - 1] = get_string_tag(endianess, stream);
 		compound.data[compound.size - 1] = get_multi_tag(tag_id, endianess, stream);
