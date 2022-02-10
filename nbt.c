@@ -5,7 +5,6 @@
  */
 
 #include "./nbt.h"
-#include <stdlib.h>
 #include <string.h>
 
 int8_t get_nbt_byte_tag(binary_stream_t *stream)
