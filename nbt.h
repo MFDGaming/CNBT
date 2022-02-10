@@ -38,13 +38,13 @@ typedef struct {
 } nbt_byte_array_t;
 
 typedef struct {
-        int32_t *data;
-        int32_t size;
+	int32_t *data;
+	int32_t size;
 } nbt_int_array_t;
 
 typedef struct {
-        long long *data;
-        int32_t size;
+	int64_t *data;
+	int32_t size;
 } nbt_long_array_t;
 
 typedef struct {
