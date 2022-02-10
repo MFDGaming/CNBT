@@ -7,8 +7,9 @@
 #ifndef NBT_H
 #define NBT_H
 
-#include "./cbinarystream/binary_stream.h"
+#include <cbinarystream/binary_stream.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #define END_TAG 0
 #define BYTE_TAG 1
@@ -53,7 +54,7 @@ typedef struct {
 } nbt_list_t;
 
 typedef struct {
-	int size;
+	size_t size;
 	int8_t *tag_ids;
 	char **names;
 	nbt_multi_t *data;
