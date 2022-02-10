@@ -164,8 +164,8 @@ nbt_multi_t get_nbt_multi_tag(int8_t tag_id, uint8_t endianess, binary_stream_t 
 nbt_list_t get_nbt_list_tag(uint8_t endianess, binary_stream_t *stream)
 {
 	nbt_list_t list;
-	list.tag_id = get_byte_tag(stream);
-	list.size = get_int_tag(endianess, stream);
+	list.tag_id = get_nbt_byte_tag(stream);
+	list.size = get_nbt_int_tag(endianess, stream);
 	list.data = (nbt_multi_t *) malloc(list.size * sizeof(nbt_multi_t));
 	int32_t i;
 	for (i = 0; i < list.size; ++i) {
@@ -179,16 +179,16 @@ nbt_compound_t get_nbt_compound_tag(uint8_t endianess, binary_stream_t *stream)
 	nbt_compound_t compound;
 	compound.size = 0;
 	compound.tag_ids = (int8_t *) malloc(0);
-	compound.names = (char *) malloc(0);
+	compound.names = (char **) malloc(0);
 	compound.data = (nbt_multi_t *) malloc(0);
 	while (stream->offset < stream->size) {
-		int8_t tag_id = get_byte_tag(stream);
+		int8_t tag_id = get_nbt_byte_tag(stream);
 		if (tag_id == 0) {
 			break;
 		}
 		++compound.size;
 		compound.tag_ids = (int8_t *) realloc(compound.tag_ids, compound.size);
-		compound.names = (char *) realloc(compound.names, compound.size * sizeof(char *));
+		compound.names = (char **) realloc(compound.names, compound.size * sizeof(char *));
 		compound.data = (nbt_multi_t *) realloc(compound.data, compound.size * sizeof(nbt_multi_t));
 		compound.tag_ids[compound.size - 1] = tag_id;
 		compound.names[compound.size - 1] = get_nbt_string_tag(endianess, stream);
@@ -295,7 +295,7 @@ void put_nbt_double_tag(double value, uint8_t endianess, binary_stream_t *stream
 	}
 }
 
-void put_nbt_byte_array_tag(byte_array_t value, uint8_t endianess, binary_stream_t *stream)
+void put_nbt_byte_array_tag(nbt_byte_array_t value, uint8_t endianess, binary_stream_t *stream)
 {
 	put_nbt_int_tag(value.size, endianess, stream);
 	int32_t i;
