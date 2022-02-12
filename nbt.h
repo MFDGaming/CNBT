@@ -127,4 +127,8 @@ void put_nbt_int_array_tag(nbt_int_array_t value, uint8_t endianess, binary_stre
 
 void put_nbt_long_array_tag(nbt_long_array_t value, uint8_t endianess, binary_stream_t *stream);
 
+void destroy_nbt_list(nbt_list_t value);
+
+void destroy_nbt_compound(nbt_compound_t value);
+
 #endif
