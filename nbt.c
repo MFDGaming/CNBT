@@ -406,3 +406,62 @@ void put_nbt_long_array_tag(nbt_long_array_t value, uint8_t endianess, binary_st
 		put_nbt_long_tag(value.data[i], endianess, stream);
 	}
 }
+
+void destroy_nbt_list(nbt_list_t value)
+{
+	int32_t i;
+	for (i = 0; i < value.size; ++i) {
+		switch (value.tag_id) {
+		case STRING_TAG:
+			free(value.data[i].string_tag);
+			break;
+		case BYTE_ARRAY_TAG:
+			free(value.data[i].byte_array_tag.data);
+			break;
+		case INT_ARRAY_TAG:
+			free(value.data[i].int_array_tag.data);
+			break;
+		case LONG_ARRAY_TAG:
+			free(value.data[i].long_array_tag.data);
+			break;
+		case LIST_TAG:
+			destroy_nbt_list(value.data[i].list_tag);
+			break;
+		case COMPOUND_TAG:
+			destroy_nbt_compound(value.data[i].compound_tag);
+			break;
+		}
+	}
+	free(value.data);
+}
+
+void destroy_nbt_compound(nbt_compound_t value)
+{
+	int32_t i;
+	for (i = 0; i < value.size; ++i) {
+		free(value.names[i]);
+		switch (value.tag_ids[i]) {
+		case STRING_TAG:
+			free(value.data[i].string_tag);
+			break;
+		case BYTE_ARRAY_TAG:
+			free(value.data[i].byte_array_tag.data);
+			break;
+		case INT_ARRAY_TAG:
+			free(value.data[i].int_array_tag.data);
+			break;
+		case LONG_ARRAY_TAG:
+			free(value.data[i].long_array_tag.data);
+			break;
+		case LIST_TAG:
+			destroy_nbt_list(value.data[i].list_tag);
+			break;
+		case COMPOUND_TAG:
+			destroy_nbt_compound(value.data[i].compound_tag);
+			break;
+		}
+	}
+	free(value.data);
+	free(value.names);
+	free(value.tag_ids);
+}
