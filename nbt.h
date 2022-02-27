@@ -75,6 +75,12 @@ union _nbt_multi {
 	nbt_compound_t compound_tag;
 };
 
+typedef struct {
+	char *name;
+	int8_t tag_id;
+	nbt_multi_t data;
+} nbt_named_t;
+
 int8_t get_nbt_byte_tag(binary_stream_t *stream);
 
 int16_t get_nbt_short_tag(uint8_t endianess, binary_stream_t *stream);
