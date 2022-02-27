@@ -107,6 +107,8 @@ nbt_int_array_t get_nbt_int_array_tag(uint8_t endianess, binary_stream_t *stream
 
 nbt_long_array_t get_nbt_long_array_tag(uint8_t endianess, binary_stream_t *stream);
 
+nbt_named_t get_nbt_named_tag(uint8_t endianess, binary_stream_t *stream);
+
 void put_nbt_byte_tag(int8_t value, binary_stream_t *stream);
 
 void put_nbt_short_tag(int16_t value, uint8_t endianess, binary_stream_t *stream);
@@ -133,8 +135,12 @@ void put_nbt_int_array_tag(nbt_int_array_t value, uint8_t endianess, binary_stre
 
 void put_nbt_long_array_tag(nbt_long_array_t value, uint8_t endianess, binary_stream_t *stream);
 
+void put_nbt_named_tag(nbt_named_t value, uint8_t endianess, binary_stream_t *stream);
+
 void destroy_nbt_list(nbt_list_t value);
 
 void destroy_nbt_compound(nbt_compound_t value);
+
+void destroy_nbt_named(nbt_named_t value);
 
 #endif
