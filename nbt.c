@@ -221,7 +221,8 @@ nbt_long_array_t get_nbt_long_array_tag(uint8_t endianess, binary_stream_t *stre
 	return long_array;
 }
 
-nbt_named_t get_nbt_named_tag(uint8_t endianess, binary_stream_t *stream) {
+nbt_named_t get_nbt_named_tag(uint8_t endianess, binary_stream_t *stream)
+{
 	nbt_named_t tag;
 	tag.tag_id = get_nbt_byte_tag(stream);
 	if (tag.tag_id != END_TAG) {
@@ -416,7 +417,8 @@ void put_nbt_long_array_tag(nbt_long_array_t value, uint8_t endianess, binary_st
 	}
 }
 
-void put_nbt_named_tag(nbt_named_t value, uint8_t endianess, binary_stream_t *stream) {             nbt_named_t tag;
+void put_nbt_named_tag(nbt_named_t value, uint8_t endianess, binary_stream_t *stream)
+{
 	put_nbt_byte_tag(value.tag_id, stream);
 	if (value.tag_id != END_TAG) {
 		put_nbt_string_tag(value.name, endianess, stream);
