@@ -183,7 +183,7 @@ nbt_compound_t get_nbt_compound_tag(uint8_t endianess, binary_stream_t *stream)
 	compound.data = (nbt_multi_t *) malloc(0);
 	while (stream->offset < stream->size) {
 		int8_t tag_id = get_nbt_byte_tag(stream);
-		if (tag_id == 0) {
+		if (tag_id == END_TAG) {
 			break;
 		}
 		++compound.size;
